@@ -16,9 +16,9 @@ and 4 node containers under same network as of workstation namely
 
 >NOTE: Default user when nodes starts is user: **root**
 
-So you have to set root as user for ansible scripts.
+So you have to set **root** as user for ansible playbook scripts.
 
->You have to write directly the below giveb hostname to your ansible inventory instead of using  IP addresses
+>NOTE: You have to write directly the below giveb hostname to your ansible inventory instead of using  IP addresses
 
 ## **Workstaion Hostname | user: master**
 
