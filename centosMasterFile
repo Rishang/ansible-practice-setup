@@ -1,0 +1,53 @@
+FROM centos:latest
+LABEL maintainer="Rishang"
+
+ENV TERM="xterm-256color"
+ENV container=docker
+ENV STATION="WORKSTATION"
+
+# systemd stuff
+RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+    rm -f /lib/systemd/system/multi-user.target.wants/*;\
+    rm -f /etc/systemd/system/*.wants/*;\
+    rm -f /lib/systemd/system/local-fs.target.wants/*; \
+    rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+    rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+    rm -f /lib/systemd/system/basic.target.wants/*;\
+    rm -f /lib/systemd/system/anaconda.target.wants/*;
+
+# basic command install
+RUN yum install -y epel-release sudo initscripts \
+            curl wget nc \
+            which ncurses python3 passwd \
+            glibc-locale-source glibc-langpack-en \
+            man bash-completion mlocate vim nano nmap ftp tmux \
+            net-tools bind-utils \
+    && pip3 install -U pip \
+    # ansible
+    && yum update -y \
+    && yum install -y ansible ansible-doc \
+            openssh-clients openssh-server git \
+    && yum clean all
+# user setup
+ARG USERNAME="master"
+
+RUN groupadd sudo \
+    && echo '%sudo	ALL=(ALL:ALL) ALL' >> /etc/sudoers \
+    && if ! [[ ${USERNAME} == "root" ]];then \
+        useradd -G sudo ${USERNAME} \
+        && echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
+        && su -c "mkdir ~/scripts ~/.ssh ; chmod 700 ~/.ssh" ${USERNAME} \
+    ;fi
+
+COPY --chown=${USERNAME}:${USERNAME} .ssh /home/${USERNAME}/.ssh/
+
+# bash theme & ssh setup
+RUN su -c \
+    "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh )" ${USERNAME} \
+    && su -c "sed -i '/git/d' ~/.bashrc && echo 'alias grep=\"grep --color=auto\" ' >> ~/.bashrc" ${USERNAME} \
+    && su -c 'sed -i "s/clock_prompt//g" ~/.oh-my-bash/themes/font/font.theme.sh' ${USERNAME} \
+    && mandb && updatedb 
+
+
+# WORKDIR /home/${USERNAME}/scripts
+CMD ["/usr/sbin/init"]

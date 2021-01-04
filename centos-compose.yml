@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  
+  # master
+  workstation:
+    build:
+      context: .
+      dockerfile: centosMasterFile
+    image: ansi_workstation
+    container_name: ansible_workstation
+    privileged: true
+    cap_add:
+      - SYS_ADMIN
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./my_work:/home/master/scripts
+    tmpfs:
+      - /tmp
+      - /run
+    networks: ["ansible_station"]
+    restart: unless-stopped
+    hostname: workstation
+  
+  # nodes
+  servera:
+    build:
+      context: .
+      dockerfile: centosNodeFile
+    image: ansi_node
+    container_name: ansible_servera
+    privileged: true
+    cap_add:
+      - SYS_ADMIN
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /tmp
+      - /run
+    networks: ["ansible_station"]
+    restart: unless-stopped
+    hostname: servera
+  
+  serverb:
+    image: ansi_node
+    container_name: ansible_serverb
+    privileged: true
+    cap_add:
+      - SYS_ADMIN
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /tmp
+      - /run
+    networks: ["ansible_station"]
+    restart: unless-stopped
+    hostname: serverb
+
+  serverc:
+    image: ansi_node
+    container_name: ansible_serverc
+    privileged: true
+    cap_add:
+      - SYS_ADMIN
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /tmp
+      - /run
+    networks: ["ansible_station"]
+    restart: unless-stopped
+    hostname: serverc
+
+  serverd:
+    image: ansi_node
+    container_name: ansible_serverd
+    privileged: true
+    cap_add:
+      - SYS_ADMIN
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /tmp
+      - /run
+    networks: ["ansible_station"]
+    restart: unless-stopped
+    hostname: serverd
+
+networks:
+  ansible_station:

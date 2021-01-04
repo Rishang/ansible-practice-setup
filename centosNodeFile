@@ -1,0 +1,49 @@
+FROM centos:latest
+LABEL maintainer="Random"
+
+ENV TERM="xterm-256color"
+ENV container=docker
+ENV STATION="NODE"
+
+# systemd stuff
+RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+    rm -f /lib/systemd/system/multi-user.target.wants/*;\
+    rm -f /etc/systemd/system/*.wants/*;\
+    rm -f /lib/systemd/system/local-fs.target.wants/*; \
+    rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+    rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+    rm -f /lib/systemd/system/basic.target.wants/*;\
+    rm -f /lib/systemd/system/anaconda.target.wants/*;
+
+# basic command install
+RUN yum install -y epel-release sudo initscripts \
+            curl wget nc \
+            which ncurses python3 passwd \
+            glibc-locale-source glibc-langpack-en \
+            man bash-completion mlocate vim nano ftp tmux \
+            net-tools bind-utils \
+        && pip3 install -U pip \
+    && yum clean all  
+
+# ansible node setup
+RUN yum update -y \
+    && yum install -y \
+            openssh-clients openssh-server \
+            ufw \
+            firewalld \
+    && yum clean all
+
+ARG USERNAME="root"
+
+RUN groupadd sudo \
+    && echo '%sudo	ALL=(ALL:ALL) ALL' >> /etc/sudoers \
+    && su -c "echo 'alias grep=\"grep --color=auto\" ' >> ~/.bashrc" ${USERNAME} \
+    && mkdir -p ~/.ssh  && chmod 700 ~/.ssh \
+    && mandb && updatedb
+
+
+COPY .ssh/id_rsa.pub /root/.ssh/authorized_keys
+CMD ["/usr/sbin/init"]
+
+# CMD ["/usr/lib/systemd/systemd"]
+# echo -e "nameserver 8.8.4.4\nnameserver 8.8.8.8" >> /etc/resolv.conf
