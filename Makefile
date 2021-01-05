@@ -13,7 +13,6 @@ define _NODE_CONFIG
 endef
 
 define _WORKSTATION_CONFIG
-	docker exec $(1) pwd || make start
 	docker exec $(1) sh -c "rm -rf /run/nologin"
 	docker exec $(1) su -c "sudo chown -R ${WORKSTATION_USER}:${WORKSTATION_USER} ~/scripts || echo ${WORKSTATION_USER} not have ~/scripts." ${WORKSTATION_USER}
 endef
@@ -40,19 +39,24 @@ stop:
 	docker-compose -f  ${compose-file} down
 
 run_workstation:
+	docker exec $(1) pwd || make start
 	docker exec -it ${WORKSTATION} su ${WORKSTATION_USER} || make start
 
 run_servera:
-	sh -c "docker exec -it ${NODE_A} bash" || make start
+	sh -c "docker exec ${NODE_A} pwd" || make start
+	docker exec -it ${NODE_A} bash
 
 run_serverb:
-	sh -c "docker exec -it ${NODE_B} bash" || make start
+	sh -c "docker exec ${NODE_B} pwd" || make start
+	docker exec -it ${NODE_B} bash
 
 run_serverc:
-	sh -c "docker exec -it ${NODE_C} bash" || make start
+	sh -c "docker exec ${NODE_C} pwd" || make start
+	docker exec -it ${NODE_C} bash
 
 run_serverd:
-	sh -c "docker exec -it ${NODE_D} bash" || make start
+	sh -c "docker exec ${NODE_D} pwd" || make start
+	docker exec -it ${NODE_D} bash
 
 local_config:
 	chmod 600 .ssh/dockerAnsi
