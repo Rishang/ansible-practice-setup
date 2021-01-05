@@ -39,12 +39,12 @@ RUN groupadd sudo \
     && if ! [[ ${USERNAME} == "root" ]];then \
         useradd -G sudo ${USERNAME} \
         && echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
-        && su -c "mkdir ~/scripts ~/.ssh ; chmod 700 ~/.ssh" ${USERNAME} \
-    ;fi
+    ;fi \
+    && su -c "mkdir ~/scripts ~/.ssh ; chmod 700 ~/.ssh" ${USERNAME}
 
 COPY --chown=${USERNAME}:${USERNAME} .ssh /home/${USERNAME}/.ssh/
 
-# bash theme & ssh setup
+# bash theme setup
 RUN su -c \
     "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh )" ${USERNAME} \
     && su -c "sed -i '/git/d' ~/.bashrc && echo 'alias grep=\"grep --color=auto\" ' >> ~/.bashrc" ${USERNAME} \
