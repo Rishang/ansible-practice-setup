@@ -20,14 +20,17 @@ RUN yum install -y epel-release sudo initscripts \
             curl wget nc \
             which ncurses python3 passwd \
             glibc-locale-source glibc-langpack-en \
-            man bash-completion mlocate vim nano nmap ftp tmux \
-            net-tools bind-utils \
-    && pip3 install -U pip \
-    # ansible
-    && yum update -y \
+            man bash-completion mlocate vim nano ftp tmux \
+            net-tools bind-utils vsftpd \
+        && pip3 install -U pip \
+    && yum clean all  
+
+# ansible workstation steup
+RUN yum update -y \
     && yum install -y ansible ansible-doc \
             openssh-clients openssh-server git \
     && yum clean all
+
 # user setup
 ARG USERNAME="master"
 

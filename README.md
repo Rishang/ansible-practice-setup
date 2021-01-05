@@ -1,9 +1,9 @@
 
 # Ansible setup on Docker
 
-## Pre-Requisites:
+## Pre-Requisites -
 
-**Having Docker Installed on your system**
+### **Having Docker Installed on your system**
 
 Refrence to install Docker > [Click here](https://docs.docker.com/engine/install/)
 
@@ -18,7 +18,7 @@ and 4 node containers under same network as of workstation namely
 
 So you have to set **root** as user for ansible playbook scripts.
 
->NOTE: You have to write directly the below given hostname to your ansible inventory instead of using  IP addresses
+>NOTE: Directly write the below given hostname to your ansible inventory instead of using IP addresses
 
 ## **Workstaion Hostname | user: master**
 

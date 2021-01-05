@@ -21,7 +21,7 @@ RUN yum install -y epel-release sudo initscripts \
             which ncurses python3 passwd \
             glibc-locale-source glibc-langpack-en \
             man bash-completion mlocate vim nano ftp tmux \
-            net-tools bind-utils \
+            net-tools bind-utils vsftpd \
         && pip3 install -U pip \
     && yum clean all  
 

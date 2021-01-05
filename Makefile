@@ -22,6 +22,7 @@ build:
 start:
 	@echo "Starting all containers"
 	docker-compose -f  ${compose-file} up -d
+	sleep 4
 	$(call _NODE_CONFIG, ${NODE_A})
 	$(call _NODE_CONFIG, ${NODE_B})
 	$(call _NODE_CONFIG, ${NODE_C})
