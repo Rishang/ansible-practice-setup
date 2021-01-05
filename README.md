@@ -20,11 +20,11 @@ So you have to set **root** as user for ansible playbook scripts.
 
 >NOTE: Directly write the below given hostname to your ansible inventory instead of using IP addresses
 
-## **Workstaion Hostname | user: master**
+## **Workstaion Hostname and IP | user: master**
 
 - workstation | 172.72.0.2
 
-## **Node Hostnames  and IP | user: root**
+## **Node Hostnames and IP | user: root**
 
 - servera | 172.72.0.3
 - serverb | 172.72.0.4
@@ -61,6 +61,8 @@ The `~/script` folder in workstation is mounted to local storage at `./my_work` 
 
 OK now good to go, create all your ansible scripts in this directory.
 
+-----
+
 ### Running scripts locally
 
 >You need to have `ssh` and `ansible` package installed on your linux system. to run ansible scripts locally.
@@ -70,11 +72,13 @@ run following command to perform this task.
 
         make local_config
 
-To check if it worked  try ssh to any of hostname e.g: `ssh root@servera` you shiuld get shell of host servera
+To check if it worked  try ssh to any of hostname e.g: `ssh root@servera` you should get shell of host servera
 
 - **Checking ansible ping/pong**
 
         echo -e "servera\nserverb" > /tmp/i ; ansible all -i /tmp/i -m ping -u root
+
+-----
 
 ### Shell-Access to Workstation or node containers
 
