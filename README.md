@@ -61,9 +61,33 @@ The `~/script` folder in workstation is mounted to local storage at `./my_work` 
 
 OK now good to go, create all your ansible scripts in this directory.
 
-you can also access it form local system in folder called `my_work` also can write sripts directly there and run it inside workstation container.
+### Shell-Access to Workstation or node
 
------
+Commands to get shell access to below containers.
+
+- **Workstation shell access command:**
+
+        make run_workstation
+
+- **servera shell access command:**
+
+        make  run_servera
+
+- **serverc shell access command:**
+
+        make  run_serverc
+
+- **serverb shell access command:**
+
+        make  run_serverb
+
+- **serverd shell access command:**
+
+        make  run_serverd
+
+you can also access it form local system in folder called `my_work` also can write sripts directly there with any editor you like and run it inside workstation container.
+
+-------
 
 ## Stop all the containers
 
