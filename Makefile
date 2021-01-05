@@ -36,5 +36,5 @@ run_workstation:
 	@echo "Running ${WORKSTATION} with user ${WORKSTATION_USER}"
 	docker exec ${WORKSTATION} pwd || make start
 	docker exec ${WORKSTATION} sh -c "rm -rf /run/nologin"
-	docker exec ${WORKSTATION} su -c "chown -R ${WORKSTATION_USER}:${WORKSTATION_USER} ~/scripts || echo ${WORKSTATION_USER} not have ~/scripts." ${WORKSTATION_USER}
+	docker exec ${WORKSTATION} su -c "sudo chown -R ${WORKSTATION_USER}:${WORKSTATION_USER} ~/scripts || echo ${WORKSTATION_USER} not have ~/scripts." ${WORKSTATION_USER}
 	docker exec -it ${WORKSTATION} su ${WORKSTATION_USER}
