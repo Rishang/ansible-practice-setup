@@ -7,9 +7,8 @@ NODE_C = "ansible_serverc"
 NODE_D = "ansible_serverd"
 
 define _NODE_CONFIG
-    docker exec $(1) sh -c 'echo -e "nameserver 8.8.4.4\nnameserver 8.8.8.8" >> /etc/resolv.conf'
-	docker exec $(1) sh -c "rm /run/nologin"
-	docker exec $(1) sh -c "systemctl start firewalld"
+    docker exec $(1) sh -c 'grep -E "nameserver 8.8.(4.4|8.8)" /etc/resolv.conf || echo -e "nameserver 8.8.4.4\nnameserver 8.8.8.8" >> /etc/resolv.conf'
+	docker exec $(1) sh -c "rm -f /run/nologin ; systemctl start firewalld"
 	docker exec $(1) sh -c "firewall-cmd --permanent --zone=public --change-interface=eth0 && firewall-cmd --reload"
 endef
 
