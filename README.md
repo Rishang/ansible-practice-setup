@@ -72,7 +72,7 @@ run following command to perform this task.
 
 To check if it worked  try ssh to any of hostname e.g: `ssh root@servera` you shiuld get shell of host servera
 
-**Checking ansible ping/pong**
+- **Checking ansible ping/pong**
 
         echo -e "servera\nserverb" > /tmp/i ; ansible all -i /tmp/i -m ping -u root
 
