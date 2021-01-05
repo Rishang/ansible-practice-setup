@@ -18,7 +18,9 @@ services:
     tmpfs:
       - /tmp
       - /run
-    networks: ["ansible_station"]
+    networks: 
+      ansible_station:
+        ipv4_address: 172.72.0.2
     restart: unless-stopped
     hostname: workstation
   
@@ -37,7 +39,9 @@ services:
     tmpfs:
       - /tmp
       - /run
-    networks: ["ansible_station"]
+    networks: 
+      ansible_station:
+        ipv4_address: 172.72.0.3
     restart: unless-stopped
     hostname: servera
   
@@ -52,7 +56,9 @@ services:
     tmpfs:
       - /tmp
       - /run
-    networks: ["ansible_station"]
+    networks: 
+      ansible_station:
+        ipv4_address: 172.72.0.4
     restart: unless-stopped
     hostname: serverb
 
@@ -67,7 +73,9 @@ services:
     tmpfs:
       - /tmp
       - /run
-    networks: ["ansible_station"]
+    networks: 
+      ansible_station:
+        ipv4_address: 172.72.0.5
     restart: unless-stopped
     hostname: serverc
 
@@ -82,9 +90,14 @@ services:
     tmpfs:
       - /tmp
       - /run
-    networks: ["ansible_station"]
+    networks: 
+      ansible_station:
+        ipv4_address: 172.72.0.6
     restart: unless-stopped
     hostname: serverd
 
 networks:
   ansible_station:
+    ipam:
+      config:
+        - subnet: "172.72.0.0/16"
