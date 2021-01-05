@@ -47,7 +47,7 @@ This step has to done only once and may take some time.
 
 Thats it now workstation and node has been started on same network.
 
-### Step 3 | access workstation
+### Step 3 | Access workstation
 
 Access shell of workstation
 
@@ -55,13 +55,15 @@ Access shell of workstation
 
 This command will give you shell to the workstation container
 
-The `~/script` folder in workstation is mounted to local storage so create all your ansible scripts in `~/scripts`
+The `~/script` folder in workstation is mounted to local storage at `./my_work` so create all your ansible scripts in `~/scripts`
 
     cd ~/scripts
 
 OK now good to go, create all your ansible scripts in this directory.
 
 you can also access it form local system in folder called `my_work` also can write sripts directly there and run it inside workstation container.
+
+-----
 
 ## Stop all the containers
 
