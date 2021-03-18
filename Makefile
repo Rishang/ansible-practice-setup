@@ -39,24 +39,24 @@ stop:
 	docker-compose -f  ${compose-file} down
 
 run_workstation:
-	docker exec $(1) pwd || make start
-	docker exec -it ${WORKSTATION} su ${WORKSTATION_USER} || make start
+	@docker exec -it ${WORKSTATION} su ${WORKSTATION_USER} || (make start ; sleep 1 \
+	&& docker exec -it ${WORKSTATION} su ${WORKSTATION_USER})
 
 run_servera:
-	sh -c "docker exec ${NODE_A} pwd" || make start
-	docker exec -it ${NODE_A} bash
+	@sh -c "docker exec -it ${NODE_A} bash" || (make start ; sleep 1 \
+	&& docker exec -it ${NODE_A} bash)
 
 run_serverb:
-	sh -c "docker exec ${NODE_B} pwd" || make start
-	docker exec -it ${NODE_B} bash
+	@sh -c "docker exec -it ${NODE_B} bash" || (make start ; sleep 1 \
+	&& docker exec -it ${NODE_B} bash)
 
 run_serverc:
-	sh -c "docker exec ${NODE_C} pwd" || make start
-	docker exec -it ${NODE_C} bash
+	@sh -c "docker exec -it ${NODE_C} bash" || (make start ; sleep 1 \
+	&& docker exec -it ${NODE_C} bash)
 
 run_serverd:
-	sh -c "docker exec ${NODE_D} pwd" || make start
-	docker exec -it ${NODE_D} bash
+	sh -c "docker exec -it ${NODE_D} bash" || (make start ; sleep 1 \
+	&& docker exec -it ${NODE_D} bash)
 
 local_config:
 	chmod 600 .ssh/dockerAnsi
