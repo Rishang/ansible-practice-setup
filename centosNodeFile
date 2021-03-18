@@ -30,7 +30,6 @@ RUN yum update -y \
     && yum install -y \
             openssh-clients openssh-server \
             ufw \
-            firewalld \
     && yum clean all
 
 ARG USERNAME="root"
@@ -43,4 +42,5 @@ RUN groupadd sudo \
 
 
 COPY .ssh/dockerAnsi.pub /root/.ssh/authorized_keys
+COPY conf/fastestmirror.conf /etc/yum/pluginconf.d/fastestmirror.conf
 CMD ["/usr/sbin/init"]

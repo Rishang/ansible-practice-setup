@@ -1,4 +1,3 @@
-compose-file = centos-compose.yml
 WORKSTATION_USER = master
 WORKSTATION = ansible_workstation
 NODE_A = "ansible_servera"
@@ -8,8 +7,7 @@ NODE_D = "ansible_serverd"
 
 define _NODE_CONFIG
     docker exec $(1) sh -c 'grep -E "nameserver 8.8.(4.4|8.8)" /etc/resolv.conf || echo -e "nameserver 8.8.4.4\nnameserver 8.8.8.8" >> /etc/resolv.conf'
-	docker exec $(1) sh -c "rm -f /run/nologin ; systemctl start firewalld"
-	docker exec $(1) sh -c "firewall-cmd --permanent --zone=public --change-interface=eth0 && firewall-cmd --reload"
+	docker exec $(1) sh -c "rm -f /run/nologin"
 endef
 
 define _WORKSTATION_CONFIG
@@ -22,11 +20,11 @@ build:
 	chmod 600 .ssh/dockerAnsi
 	chmod 600 .ssh/config
 	chmod 640 .ssh/dockerAnsi.pub
-	docker-compose -f  ${compose-file} build
+	docker-compose build
 
 start:
 	@echo "Starting all containers"
-	docker-compose -f  ${compose-file} up -d
+	docker-compose up --build -d
 	sleep 4
 	$(call _WORKSTATION_CONFIG, ${WORKSTATION})
 	$(call _NODE_CONFIG, ${NODE_A})
@@ -36,7 +34,7 @@ start:
 
 stop:
 	@echo "Removing all containers"
-	docker-compose -f  ${compose-file} down
+	docker-compose down
 
 run_workstation:
 	@docker exec -it ${WORKSTATION} su ${WORKSTATION_USER} || (make start ; sleep 1 \
