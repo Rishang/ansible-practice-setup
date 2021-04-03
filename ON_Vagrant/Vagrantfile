@@ -1,0 +1,128 @@
+
+# ===== Hosts ======
+# 172.25.250.9    workstation.lab.example.com   workstation
+# 172.25.250.10   servera.lab.example.com       servera
+# 172.25.250.11   serverb.lab.example.com       serverb
+# 172.25.250.12   serverc.lab.example.com       serverc
+# 172.25.250.13   serverd.lab.example.com       serverd
+
+Vagrant.configure("2") do |config|
+
+  config.vm.define "master" do |master|
+    master.vm.provider "virtualbox" do |vb|
+      # Display the VirtualBox GUI when booting the machine
+      vb.gui = false
+      vb.memory = "512"
+      vb.cpus = 1
+      vb.name = "ansible-workstation"
+      vb.customize ["modifyvm", :id, "--vram", "12"]
+      vb.customize ["modifyvm", :id, "--audio", "none"]
+    end
+    
+    # master.ssh.shell = 'zsh'
+    master.vm.box = "rishang/ansible_workstation"
+    master.vm.network "private_network", ip: "172.25.250.9"
+    master.ssh.private_key_path = './scripts/conf/master/private_key'
+    master.vm.hostname = "workstation"
+
+    # provision
+    master.vm.provision "file", source: "./scripts", destination: "/tmp/scripts"
+    master.vm.provision "shell", inline: "yum install -y epel-release"
+    master.vm.provision "shell", inline: "/usr/bin/bash /tmp/scripts/setup.sh"
+  end
+
+  # nodes
+  servers = {"servera" => "172.25.250.10"}
+  # servers = {
+  #   "servera" => "172.25.250.10",
+  #   "serverb" => "172.25.250.11",
+  #   "serverc" => "172.25.250.12",
+  #   "serverd" => "172.25.250.13"
+  # }
+  
+  # create all nodes
+  (servers).each do |s|
+
+    server_name = s[0]
+    server_ip = s[1]
+
+    config.vm.define server_name do |node|
+      node.vm.provider "virtualbox" do |vb|
+        # Display the VirtualBox GUI when booting the machine
+        vb.gui = false
+        vb.memory = "512"
+        vb.cpus = 1
+        vb.name = server_name
+        vb.customize ["modifyvm", :id, "--vram", "12"]
+        vb.customize ["modifyvm", :id, "--audio", "none"]
+      end
+      
+      node.vm.box = "rishang/ansible_node"
+      node.vm.hostname = server_name
+      node.vm.network "private_network", ip: server_ip
+      node.ssh.private_key_path = './scripts/conf/node/private_key'
+
+      # provision
+      node.vm.provision "file", source: "./scripts", destination: "/tmp/scripts"
+      node.vm.provision "shell", inline: "yum install -y epel-release"
+      node.vm.provision "shell", inline: "/usr/bin/bash -x /tmp/scripts/setup.sh"
+    end
+  end
+
+
+
+
+  # Disable automatic box update checking. If you disable this, then
+  # boxes will only be checked for updates when the user runs
+  # `vagrant box outdated`. This is not recommended.
+  # config.vm.box_check_update = false
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine. In the example below,
+  # accessing "localhost:8080" will access port 80 on the guest machine.
+  # NOTE: This will enable public access to the opened port
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine and only allow access
+  # via 127.0.0.1 to disable public access
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+
+  # Create a private network, which allows host-only access to the machine
+  # using a specific IP.
+  # config.vm.network "private_network", ip: "192.168.33.10"
+
+  # Create a public network, which generally matched to bridged network.
+  # Bridged networks make the machine appear as another physical device on
+  # your network.
+  # config.vm.network "public_network"
+
+  # Share an additional folder to the guest VM. The first argument is
+  # the path on the host to the actual folder. The second argument is
+  # the path on the guest to mount the folder. And the optional third
+  # argument is a set of non-required options.
+  # config.vm.synced_folder "../data", "/vagrant_data"
+
+  # Provider-specific configuration so you can fine-tune various
+  # backing providers for Vagrant. These expose provider-specific options.
+  # Example for VirtualBox:
+  #
+  # config.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+  #   vb.gui = true
+  #
+  #   # Customize the amount of memory on the VM:
+  #   vb.memory = "1024"
+  # end
+  #
+  # View the documentation for the provider you are using for more
+  # information on available options.
+
+  # Enable provisioning with a shell script. Additional provisioners such as
+  # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
+  # documentation for more information about their specific syntax and use.
+  # config.vm.provision "shell", inline: <<-SHELL
+  #   apt-get update
+  #   apt-get install -y apache2
+  # SHELL
+end
