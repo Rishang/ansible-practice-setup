@@ -27,7 +27,8 @@ Vagrant.configure("2") do |config|
 
     # provision
     master.vm.provision "file", source: "./scripts", destination: "/tmp/scripts"
-    master.vm.provision "shell", inline: "yum install -y epel-release"
+    master.vm.provision "shell", inline: "yum install -y epel-release dos2unix"
+    master.vm.provision "shell", inline: "find /tmp/scripts -type f -exec dos2unix {} +"
     master.vm.provision "shell", inline: "/usr/bin/bash /tmp/scripts/setup.sh"
   end
 
@@ -64,7 +65,8 @@ Vagrant.configure("2") do |config|
 
       # provision
       node.vm.provision "file", source: "./scripts", destination: "/tmp/scripts"
-      node.vm.provision "shell", inline: "yum install -y epel-release"
+      node.vm.provision "shell", inline: "yum install -y epel-release dos2unix"
+      node.vm.provision "shell", inline: "find /tmp/scripts -type f -exec dos2unix {} +"
       node.vm.provision "shell", inline: "/usr/bin/bash -x /tmp/scripts/setup.sh"
     end
   end
