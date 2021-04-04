@@ -33,21 +33,17 @@ So you have to set **root** as user for ansible playbook scripts.
 
 ## Steps of setup
 
-### Step 1 | Build workstation and node Images
+### Step 1 | Build workstation and node Images and Start them
 
 Clone the repo through `git clone https://github.com/Rishang/dockerAnsi.git` and `cd dockerAnsi`.
 
 This step has to done only once and may take some time.
 
-    make build
-
-### Step 2 | Start workstation and node containers
-
     make start
 
-Thats it now workstation and node has been started on same network.
+That's it now workstation and node has been started on same network.
 
-### Step 3 | Access workstation
+### Step 2 | Access workstation
 
 Access shell of workstation
 
@@ -63,7 +59,7 @@ OK now good to go, create all your ansible scripts in this directory.
 
 -----
 
-### Running scripts locally
+### Running scripts locally (Recommented)
 
 >You need to have `ssh` and `ansible` package installed on your linux system. to run ansible scripts locally.
 
@@ -79,6 +75,26 @@ To check if it worked  try ssh to any of hostname e.g: `ssh root@servera` you sh
         echo -e "servera\nserverb" > /tmp/i ; ansible all -i /tmp/i -m ping -u root
 
 -----
+
+## Stop all the containers
+
+If your work in completed and want to shut down all container run following command.
+
+    make stop
+
+## Remove all the containers
+
+In order to remove all environment containers
+
+    make remove
+
+## Reset all the containers
+
+In order to reset environment
+
+    make remove
+
+----
 
 ### Shell-Access to Workstation or node containers
 
@@ -105,11 +121,3 @@ Commands to get shell access to below containers.
         make  run_serverd
 
 you can also access it form local system in folder called `my_work` also can write sripts directly there with any editor you like and run it inside workstation container.
-
--------
-
-## Stop all the containers
-
-If your work in completed and want to shut down all container run following command.
-
-    make stop

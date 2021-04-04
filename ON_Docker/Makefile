@@ -24,7 +24,8 @@ build:
 
 start:
 	@echo "Starting all containers"
-	docker-compose up --build -d
+	make build
+	docker-compose up -d
 	sleep 4
 	$(call _WORKSTATION_CONFIG, ${WORKSTATION})
 	$(call _NODE_CONFIG, ${NODE_A})
@@ -33,8 +34,19 @@ start:
 	$(call _NODE_CONFIG, ${NODE_D})
 
 stop:
+	@echo "Stopping all containers"
+	docker-compose kill
+
+
+remove:
 	@echo "Removing all containers"
 	docker-compose down
+
+
+reset:
+	@echo "Removing all containers"
+	make remove
+	make start
 
 run_workstation:
 	@docker exec -it ${WORKSTATION} su ${WORKSTATION_USER} || (make start ; sleep 1 \
