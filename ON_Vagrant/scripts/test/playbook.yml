@@ -1,0 +1,6 @@
+---
+
+- name: check ping on nodes
+  hosts: all
+  tasks:
+    - ping:
