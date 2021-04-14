@@ -20,22 +20,19 @@ So you have to set **root** as user for ansible playbook scripts.
 
 >NOTE: Directly write the below given hostname to your ansible inventory instead of using IP addresses
 
-## **Workstaion Hostname and IP | user: master**
-
-- workstation | 172.72.0.2
-
-## **Node Hostnames and IP | user: root**
-
-- servera | 172.72.0.3
-- serverb | 172.72.0.4
-- serverc | 172.72.0.5
-- serverd | 172.72.0.6
+Type   |  Hostname   | ip-address | username | password  |
+-----  | ----------  |------------|----------|-----------|
+Master | workstation | 172.72.0.2 | master   |           |
+node   | servera     | 172.72.0.3 | root     | root      |
+node   | serverb     | 172.72.0.4 | root     | root      |
+node   | serverc     | 172.72.0.5 | root     | root      |
+node   | serverd     | 172.72.0.6 | root     | root      |
 
 ## Steps of setup
 
 ### Step 1 | Build workstation and node Images and Start them
 
-Clone the repo through `git clone https://github.com/Rishang/dockerAnsi.git` and `cd dockerAnsi`.
+Clone the repo through `git clone https://github.com/Rishang/ansible-practice-setup.git` and `cd ./ansible-practice-setup/ON_Docker`
 
 This step has to done only once and may take some time.
 
@@ -92,7 +89,7 @@ In order to remove all environment containers
 
 In order to reset environment
 
-    make remove
+    make reset
 
 ----
 
