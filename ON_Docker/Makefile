@@ -16,6 +16,7 @@ define _WORKSTATION_CONFIG
 endef
 
 build:
+	which docker-compose || @echo "docker-compose not found, Install it running: pip install docker-compose"
 	@echo "Building ansible master /node images"
 	chmod 600 .ssh/dockerAnsi
 	chmod 600 .ssh/config
