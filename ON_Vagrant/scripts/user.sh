@@ -13,5 +13,5 @@ if [[ $HOSTNAME == 'workstation' ]];then
     chmod 600  ~/.ssh/id_rsa.pub
 else
 
-    grep "WORKSTATION_USER"  ~/.ssh/authorized_keys || cat ${s_scripts}/conf/id_rsa.pub >> ~/.ssh/authorized_keys
+    grep "${WORKSTATION_USER}"  ~/.ssh/authorized_keys || cat ${s_scripts}/conf/id_rsa.pub >> ~/.ssh/authorized_keys
 fi
